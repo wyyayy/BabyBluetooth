@@ -9,68 +9,81 @@
 #import "BabyRhythm.h"
 #import "BabyDefine.h"
 
-@implementation BabyRhythm {
+@implementation BabyRhythm
+{
     BOOL isOver;
     BBBeatsBreakBlock blockOnBeatBreak;
     BBBeatsOverBlock blockOnBeatOver;
 }
 
-- (instancetype)init {
+- (instancetype)init
+{
     self = [super init];
-    if (self) {
+    if (self)
+    {
         //beatsInterval
         _beatsInterval = KBABYRHYTHM_BEATS_DEFAULT_INTERVAL;
     }
-    return  self;
+    return self;
 }
 
-- (void)beats {
-    
-    if (isOver) {
+- (void)beats
+{
+
+    if (isOver)
+    {
         BabyLog(@">>>beats isOver");
         return;
     }
-    
-    BabyLog(@">>>beats at :%@",[NSDate date]);
-    if (self.beatsTimer) {
-        [self.beatsTimer setFireDate: [[NSDate date]dateByAddingTimeInterval:self.beatsInterval]];
+
+    BabyLog(@">>>beats at :%@", [NSDate date]);
+    if (self.beatsTimer)
+    {
+        [self.beatsTimer setFireDate:[[NSDate date] dateByAddingTimeInterval:self.beatsInterval]];
     }
-    else {
-       self.beatsTimer = [NSTimer timerWithTimeInterval:self.beatsInterval target:self selector:@selector(beatsBreak) userInfo:nil repeats:YES];
-        [self.beatsTimer setFireDate: [[NSDate date]dateByAddingTimeInterval:self.beatsInterval]];
+    else
+    {
+        self.beatsTimer = [NSTimer timerWithTimeInterval:self.beatsInterval target:self selector:@selector(beatsBreak) userInfo:nil repeats:YES];
+        [self.beatsTimer setFireDate:[[NSDate date] dateByAddingTimeInterval:self.beatsInterval]];
         [[NSRunLoop currentRunLoop] addTimer:self.beatsTimer forMode:NSRunLoopCommonModes];
     }
 }
 
-- (void)beatsBreak {
-     BabyLog(@">>>beatsBreak :%@",[NSDate date]);
+- (void)beatsBreak
+{
+    BabyLog(@">>>beatsBreak :%@", [NSDate date]);
     [self.beatsTimer setFireDate:[NSDate distantFuture]];
-    if (blockOnBeatBreak) {
+    if (blockOnBeatBreak)
+    {
         blockOnBeatBreak(self);
     }
 }
 
-- (void)beatsOver {
-    BabyLog(@">>>beatsOver :%@",[NSDate date]);
+- (void)beatsOver
+{
+    BabyLog(@">>>beatsOver :%@", [NSDate date]);
     [self.beatsTimer setFireDate:[NSDate distantFuture]];
     isOver = YES;
-    if (blockOnBeatOver) {
+    if (blockOnBeatOver)
+    {
         blockOnBeatOver(self);
     }
-    
 }
 
-- (void)beatsRestart {
-    BabyLog(@">>>beatsRestart :%@",[NSDate date]);
+- (void)beatsRestart
+{
+    BabyLog(@">>>beatsRestart :%@", [NSDate date]);
     isOver = NO;
     [self beats];
 }
 
-- (void)setBlockOnBeatsBreak:(void(^)(BabyRhythm *bry))block {
+- (void)setBlockOnBeatsBreak:(void (^)(BabyRhythm *bry))block
+{
     blockOnBeatBreak = block;
 }
 
-- (void)setBlockOnBeatsOver:(void(^)(BabyRhythm *bry))block {
+- (void)setBlockOnBeatsOver:(void (^)(BabyRhythm *bry))block
+{
     blockOnBeatOver = block;
 }
 
