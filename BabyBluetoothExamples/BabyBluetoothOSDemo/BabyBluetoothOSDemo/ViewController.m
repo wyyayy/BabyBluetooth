@@ -23,7 +23,7 @@
     
     //设置蓝牙委托
     [self babyDelegate];
-    
+        
     baby.scanForPeripherals()
         .connectToPeripherals()
         .discoverServices()
